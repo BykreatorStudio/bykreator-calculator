@@ -1013,14 +1013,21 @@ function loadCalendar() {
     var form = document.getElementById('step2MobileForm');
     var formData = new FormData(form);
     
+    // Find the selected slot to get both start and end times
+    var selectedSlot = availableSlots.find(function(slot) { return slot.start === selectedTime; });
+    
+    // Build notes with all the booking details
+    var notesText = 'Company: ' + (formData.get('company') || 'N/A') + '\n' +
+                    'Description: ' + formData.get('description') + '\n' +
+                    'Services: ' + Array.from(window.st.s.keys()).join(', ') + '\n' +
+                    'Estimate: ' + window.calculatorData.oneTime + (window.calculatorData.monthly > 0 ? ' + $' + window.calculatorData.monthly + '/mo' : '');
+    
     var bookingData = {
       name: formData.get('name'),
       email: formData.get('email'),
-      company: formData.get('company') || '',
-      description: formData.get('description'),
-      startTime: selectedTime,
-      services: Array.from(window.st.s.keys()),
-      estimate: window.calculatorData.oneTime + (window.calculatorData.monthly > 0 ? ' + $' + window.calculatorData.monthly + '/mo' : '')
+      start: selectedTime,
+      end: selectedSlot ? selectedSlot.end : new Date(new Date(selectedTime).getTime() + 30*60000).toISOString(),
+      notes: notesText
     };
     
     fetch(WORKER_URL + '/api/book', {
