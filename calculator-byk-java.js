@@ -858,8 +858,8 @@ function loadCalendar() {
       var dateObj = new Date(year, month, day);
       var dateBtn = document.createElement('button');
       dateBtn.textContent = day;
-      // Use local date format YYYY-MM-DD without timezone conversion
-      var localDateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+      // Format as YYYY-MM-DDT00:00:00 so JavaScript treats it as local time, not UTC
+      var localDateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0') + 'T00:00:00';
       dateBtn.dataset.date = localDateStr;
       
       var isPast = dateObj < today;
@@ -918,7 +918,6 @@ function loadCalendar() {
       .then(function(data) {
         console.log('API Response data:', data);
         if (data.slots && data.slots.length > 0) {
-          availableSlots = data.slots;
           renderTimeSlots(data.slots);
         } else {
           timeSlotsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:rgba(255,255,255,.4)">No available slots for this date</div>';
@@ -941,7 +940,6 @@ function loadCalendar() {
           }
         }
         
-        availableSlots = mockSlots;
         renderTimeSlots(mockSlots);
       });
   }
@@ -1015,21 +1013,14 @@ function loadCalendar() {
     var form = document.getElementById('step2MobileForm');
     var formData = new FormData(form);
     
-    // Find the selected slot to get both start and end times
-    var selectedSlot = availableSlots.find(function(slot) { return slot.start === selectedTime; });
-    
-    // Build notes with all the booking details
-    var notesText = 'Company: ' + (formData.get('company') || 'N/A') + '\n' +
-                    'Description: ' + formData.get('description') + '\n' +
-                    'Services: ' + Array.from(window.st.s.keys()).join(', ') + '\n' +
-                    'Estimate: ' + window.calculatorData.oneTime + (window.calculatorData.monthly > 0 ? ' + $' + window.calculatorData.monthly + '/mo' : '');
-    
     var bookingData = {
       name: formData.get('name'),
       email: formData.get('email'),
-      start: selectedTime,
-      end: selectedSlot ? selectedSlot.end : new Date(new Date(selectedTime).getTime() + 30*60000).toISOString(),
-      notes: notesText
+      company: formData.get('company') || '',
+      description: formData.get('description'),
+      startTime: selectedTime,
+      services: Array.from(window.st.s.keys()),
+      estimate: window.calculatorData.oneTime + (window.calculatorData.monthly > 0 ? ' + $' + window.calculatorData.monthly + '/mo' : '')
     };
     
     fetch(WORKER_URL + '/api/book', {
