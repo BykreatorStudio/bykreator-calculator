@@ -413,29 +413,23 @@ initDesktop();
 
 // Multi-step navigation
 function goToStep(stepNum) {
+  console.log('goToStep called with stepNum:', stepNum);
+  
   document.querySelectorAll('.step-container').forEach(function(step) {
     step.classList.remove('active');
   });
   document.getElementById('step' + stepNum).classList.add('active');
   
-  // Scroll to top - try multiple methods for embedded contexts
-  setTimeout(function() {
-    // Method 1: Scroll window
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Method 2: Scroll parent if in iframe
-    if (window.parent !== window) {
-      try {
-        window.parent.postMessage({ type: 'scrollToTop' }, '*');
-      } catch(e) {}
-    }
-    
-    // Method 3: Scroll calculator container
-    var calculator = document.querySelector('.calculator-container');
-    if (calculator) {
-      calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, 100);
+  // Scroll to top - simple direct approach
+  console.log('Attempting scroll to top...');
+  try {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    window.scrollTo(0, 0); // Fallback
+    console.log('Scroll executed');
+  } catch(e) {
+    console.error('Scroll error:', e);
+  }
   
   // Mobile progress bars
   var line1M = document.getElementById('progressLine1Mobile');
