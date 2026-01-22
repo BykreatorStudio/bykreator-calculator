@@ -858,7 +858,9 @@ function loadCalendar() {
       var dateObj = new Date(year, month, day);
       var dateBtn = document.createElement('button');
       dateBtn.textContent = day;
-      dateBtn.dataset.date = dateObj.toISOString().split('T')[0];
+      // Use local date format YYYY-MM-DD without timezone conversion
+      var localDateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+      dateBtn.dataset.date = localDateStr;
       
       var isPast = dateObj < today;
       var isSelected = selectedDate === dateBtn.dataset.date;
