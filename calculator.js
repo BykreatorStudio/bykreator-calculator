@@ -858,9 +858,10 @@ function loadCalendar() {
       var dateObj = new Date(year, month, day);
       var dateBtn = document.createElement('button');
       dateBtn.textContent = day;
-      // Use local date format YYYY-MM-DD without timezone conversion
-      var localDateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
-      dateBtn.dataset.date = localDateStr;
+      // Fix timezone offset issue - adjust for local timezone
+      var tzOffset = dateObj.getTimezoneOffset() * 60000;
+      var localDate = new Date(dateObj.getTime() - tzOffset);
+      dateBtn.dataset.date = localDate.toISOString().split('T')[0];
       
       var isPast = dateObj < today;
       var isSelected = selectedDate === dateBtn.dataset.date;
