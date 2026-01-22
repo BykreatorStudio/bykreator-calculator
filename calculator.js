@@ -858,9 +858,7 @@ function loadCalendar() {
       var dateObj = new Date(year, month, day);
       var dateBtn = document.createElement('button');
       dateBtn.textContent = day;
-      // Format as YYYY-MM-DDT00:00:00 so JavaScript treats it as local time, not UTC
-      var localDateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0') + 'T00:00:00';
-      dateBtn.dataset.date = localDateStr;
+      dateBtn.dataset.date = dateObj.toISOString().split('T')[0];
       
       var isPast = dateObj < today;
       var isSelected = selectedDate === dateBtn.dataset.date;
