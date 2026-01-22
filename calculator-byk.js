@@ -426,6 +426,12 @@ function goToStep(stepNum) {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     window.scrollTo(0, 0); // Fallback
+    
+    // Tell parent page to scroll (if embedded)
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'scrollToCalculator' }, '*');
+    }
+    
     console.log('Scroll executed');
   } catch(e) {
     console.error('Scroll error:', e);
