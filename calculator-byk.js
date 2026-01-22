@@ -418,6 +418,12 @@ function goToStep(stepNum) {
   });
   document.getElementById('step' + stepNum).classList.add('active');
   
+  // Scroll to top of calculator
+  var calculator = document.querySelector('.calculator-container');
+  if (calculator) {
+    calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  
   // Mobile progress bars
   var line1M = document.getElementById('progressLine1Mobile');
   var line2M = document.getElementById('progressLine2Mobile');
