@@ -418,11 +418,24 @@ function goToStep(stepNum) {
   });
   document.getElementById('step' + stepNum).classList.add('active');
   
-  // Scroll to top of calculator
-  var calculator = document.querySelector('.calculator-container');
-  if (calculator) {
-    calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  // Scroll to top - try multiple methods for embedded contexts
+  setTimeout(function() {
+    // Method 1: Scroll window
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Method 2: Scroll parent if in iframe
+    if (window.parent !== window) {
+      try {
+        window.parent.postMessage({ type: 'scrollToTop' }, '*');
+      } catch(e) {}
+    }
+    
+    // Method 3: Scroll calculator container
+    var calculator = document.querySelector('.calculator-container');
+    if (calculator) {
+      calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 100);
   
   // Mobile progress bars
   var line1M = document.getElementById('progressLine1Mobile');
