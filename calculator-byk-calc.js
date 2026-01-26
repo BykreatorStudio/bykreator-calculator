@@ -839,7 +839,7 @@ function loadCalendar() {
   var selectedTime = null;
   var availableSlots = [];
   
-  var WORKER_URL = 'https://bykreator-calendar.staycozy.workers.dev';
+  var WORKER_URL = 'https://bykreator-calendar.bykreator.workers.dev';
   
   // Render month
   function renderMonth(date) {
