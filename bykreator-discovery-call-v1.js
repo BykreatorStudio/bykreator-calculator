@@ -955,6 +955,7 @@ function loadCalendar() {
       })
       .then(function(data) {
         console.log('API Response data:', data);
+        availableSlots = data.slots || [];
         if (data.slots && data.slots.length > 0) {
           renderTimeSlots(data.slots);
         } else {
@@ -963,22 +964,7 @@ function loadCalendar() {
       })
       .catch(function(err) {
         console.error('Error loading slots:', err);
-        console.log('Using mock slots as fallback');
-        // Generate mock slots for demo (9 AM - 7 PM Serbian time, converted to user's timezone)
-        var mockSlots = [];
-        var selectedDateObj = new Date(date + 'T09:00:00+01:00'); // Serbian time (UTC+1)
-        
-        for (var hour = 9; hour < 19; hour++) {
-          for (var min = 0; min < 60; min += 30) {
-            var slotTime = new Date(date + 'T' + String(hour).padStart(2, '0') + ':' + String(min).padStart(2, '0') + ':00+01:00');
-            mockSlots.push({
-              start: slotTime.toISOString(),
-              available: true
-            });
-          }
-        }
-        
-        renderTimeSlots(mockSlots);
+        timeSlotsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:rgba(255,255,255,.4)">Error loading slots. Please try again.</div>';
       });
   }
   
@@ -986,6 +972,8 @@ function loadCalendar() {
   function renderTimeSlots(slots) {
     var timeSlotsGrid = document.getElementById('timeSlotsGrid');
     timeSlotsGrid.innerHTML = '';
+    
+    availableSlots = slots;
     
     slots.forEach(function(slot) {
       var slotTime = new Date(slot.start);
@@ -1036,7 +1024,7 @@ function loadCalendar() {
     bookBtn.title = 'Please select a date and time';
   });
   
-  // Book a Call button
+  // Book a Call button - UPDATED WITH DETAILED SERVICES
   document.getElementById('bookDiscoveryBtn').addEventListener('click', function() {
     if (!selectedDate || !selectedTime) {
       alert('Please select a date and time');
@@ -1054,15 +1042,57 @@ function loadCalendar() {
     // Find the selected slot to get both start and end times
     var selectedSlot = availableSlots.find(function(slot) { return slot.start === selectedTime; });
     
+    // BUILD DETAILED SERVICES LIST WITH ADD-ONS
+    var servicesList = [];
+    
+    window.st.s.forEach(function(v, k) {
+      if (k === 'wl' || k === 'portal_m') return;
+      
+      var svc = window.data.find(function(s) { return s.id === k; });
+      if (!svc) return;
+      
+      var price = v.m ? '$' + v.p + '/mo' : '$' + v.p.toLocaleString();
+      
+      // Find add-ons for this service
+      var addonsForService = [];
+      window.st.a.forEach(function(addonVal, addonKey) {
+        if (svc.a) {
+          var addon = svc.a.find(function(a) { return a.id === addonKey; });
+          if (addon) {
+            var addonPrice = addonVal.m ? '$' + Math.abs(addonVal.p) + '/mo' : '$' + Math.abs(addonVal.p).toLocaleString();
+            var sign = addonVal.p < 0 ? '-' : '+';
+            addonsForService.push('  • ' + addon.n + ' (' + sign + addonPrice + ')');
+          }
+        }
+      });
+      
+      servicesList.push(svc.n + ' (' + price + ')' + (addonsForService.length > 0 ? '\n' + addonsForService.join('\n') : ''));
+    });
+    
+    // Add White Label if selected
+    if (window.st.s.has('wl')) {
+      servicesList.push('White Label (+20%)');
+    }
+    
+    // Add Portal Monthly if selected
+    if (window.st.s.has('portal_m')) {
+      var portalData = window.st.s.get('portal_m');
+      servicesList.push('Client Hub - Monthly ($' + portalData.p + '/mo)');
+    }
+    
     // Build notes with all the booking details
     var notesText = 'Company: ' + (formData.get('company') || 'N/A') + '\n' +
-                    'Description: ' + formData.get('description') + '\n' +
-                    'Services: ' + Array.from(window.st.s.keys()).join(', ') + '\n' +
-                    'Estimate: ' + window.calculatorData.oneTime + (window.calculatorData.monthly > 0 ? ' + $' + window.calculatorData.monthly + '/mo' : '');
+                    'Description: ' + formData.get('description') + '\n\n' +
+                    'Services:\n' + servicesList.join('\n') + '\n\n' +
+                    'Estimate: $' + window.calculatorData.oneTime.toLocaleString() + 
+                    (window.calculatorData.monthly > 0 ? ' + $' + window.calculatorData.monthly.toLocaleString() + '/mo' : '') +
+                    (window.calculatorData.hasDiscount ? ' (' + window.calculatorData.discountPercent + '% discount applied)' : '');
     
     var bookingData = {
       name: formData.get('name'),
       email: formData.get('email'),
+      company: formData.get('company') || 'N/A',
+      description: formData.get('description'),
       start: selectedTime,
       end: selectedSlot ? selectedSlot.end : new Date(new Date(selectedTime).getTime() + 30*60000).toISOString(),
       notes: notesText
@@ -1086,8 +1116,10 @@ function loadCalendar() {
       })
       .catch(function(err) {
         console.error('Booking error:', err);
-        // Show confirmation anyway for demo (remove this in production)
-        showConfirmationScreen();
+        alert('Booking error. Please try again or contact us directly.');
+        btn.textContent = 'Book a Call';
+        btn.disabled = false;
+        btn.style.opacity = '1';
       });
   });
   
