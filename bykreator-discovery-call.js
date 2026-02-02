@@ -1,5 +1,5 @@
 (function(){
-var data=[{id:'branding',n:'Branding',p:3500,d:'$3,500',desc:'Build a memorable brand identity. Includes logo suite, strategic positioning, visual guidelines, and core brand elements. Timeline: 3-4 weeks.',a:[{id:'refresh',n:'Refresh Mode',p:-1000,det:'For existing brands; focuses on updates only; 1-2 weeks.'},{id:'bs',n:'Brand Strategy',p:2000,det:'Deep market research, positioning framework; +2-3 weeks.'},{id:'sw',n:'Storytelling Workshop',p:2000,det:'Facilitated session + narrative deck; +1-2 weeks.'},{id:'eg',n:'Extended Guidelines',p:1200,det:'Comprehensive brand book with usage rules; +1 week.'},{id:'ill',n:'Illustrations',p:800,det:'Custom illustration vectors; enhances visuals.'},{id:'icons',n:'Icons (up to 10)',p:400,det:'Custom icon set; enhances visuals.'}]},{id:'print',n:'Print Design',p:1500,d:'$1,500',desc:'Professional print collateral for comprehensive needs (minimum 5 items). Timeline: 2-3 weeks.',a:[{id:'pack',n:'Packaging Per Product Line',p:1200,det:'Custom boxes/labels; dielines included.'},{id:'lf',n:'Large-Format (Set of 3)',p:1000,det:'Banners, posters; event-optimized.'},{id:'pb',n:'Additional Batch (5 items)',p:800,det:'Scale up; volume pricing.'},{id:'prod',n:'Production Coordination',p:600,det:'Vendor liaison/proofs; excludes fees.'}]},{id:'digital',n:'Digital Design',p:1500,d:'$1,500',desc:'Campaign-ready digital assets (up to 10 static designs). Perfect for ads, social, email. Timeline: 1-2 weeks.',a:[{id:'lp',n:'Landing Page (per page)',p:1200,det:'Single conversion-focused page; +1-2 weeks.'},{id:'nt',n:'Newsletter Templates (5)',p:1200,det:'Custom email templates; automation-ready.'},{id:'av',n:'Ad Size Variations (6)',p:1000,det:'Multiple dimensions for same design.'},{id:'anim',n:'Animated HTML5 Ads (10)',p:1800,det:'Dynamic animated banners; +1-2 weeks.'}]},{id:'web',n:'Web Design/Dev',p:4000,d:'$4,000',desc:'Professional business website (up to 5 pages). Responsive design, WordPress/Webflow, basic SEO. Timeline: 4-6 weeks.',a:[{id:'dyn',n:'Dynamic Features',p:2500,det:'Forms, databases, user logins; +2-3 weeks.'},{id:'ec',n:'E-commerce Setup',p:5000,det:'Full shop functionality; +3-4 weeks.'},{id:'saas',n:'SaaS/App Build',p:12000,det:'Custom web app; starting point; +8-12 weeks.'},{id:'ep',n:'Additional Pages (per 5)',p:2000,det:'Expand beyond base 5 pages; +1-2 weeks.'},{id:'mnt',n:'Monthly Maintenance',p:250,det:'Updates, security, support; min 3 months.',m:1}]},{id:'social',n:'SMM',p:1200,d:'$1,200/mo',m:1,desc:'15-20 posts/month on 2 platforms. Content calendar, scheduling, basic engagement. Minimum 6 months.',a:[{id:'ep2',n:'Additional Platform',p:600,det:'10-15 posts/month per platform.',m:1},{id:'psa',n:'Paid Social Ads',p:800,det:'Campaign management; up to $5K spend.',m:1},{id:'ana',n:'Advanced Analytics',p:400,det:'Custom dashboards, ROI tracking.',m:1}]},{id:'ppc',n:'PPC/Display Ads',p:2000,d:'$2,000/mo',m:1,desc:'Campaign setup, 1-2 platforms, up to 10 ad creatives. Minimum 3-6 months. Ad spend excluded.',a:[{id:'dex',n:'Visual/Display Expansion',p:1000,det:'Display network campaigns with creatives.',m:1},{id:'mp',n:'Multi-Platform Expansion',p:1200,det:'Add 2-3 platforms with unified tracking.',m:1},{id:'ret',n:'Retargeting Campaign',p:800,det:'Custom audiences, dynamic ads.',m:1},{id:'asm',n:'Ad Spend Management',p:800,det:'For budgets up to $10K/month.',m:1},{id:'cr',n:'Creative Refresh (10/mo)',p:600,det:'Monthly new ad variations for A/B testing.',m:1}]},{id:'seo',n:'SEO',p:2000,d:'$2,000/mo',m:1,desc:'Audit, keyword strategy, on-page optimization, link building. Minimum 6-12 months.',a:[{id:'sc',n:'Content Creation (4-6/mo)',p:1200,det:'Keyword-optimized articles, 1K-2K words.',m:1},{id:'lb',n:'Link Building Campaign',p:1200,det:'5-10 quality backlinks/month.',m:1},{id:'ts',n:'Advanced Technical SEO',p:600,det:'Site speed, Core Web Vitals, schema.',m:1},{id:'ls',n:'Local SEO',p:600,det:'Google Business, citations, local rankings.',m:1}]},{id:'email',n:'Email Marketing',p:1500,d:'$1,500/mo',m:1,desc:'Sequence setup (4-8 emails), templates, automation, A/B testing. Minimum 3-6 months.',a:[{id:'ee',n:'Sequence Expansion (5-10)',p:1200,det:'Extended drip campaigns; one-time setup.'},{id:'crm',n:'CRM/Platform Integration',p:800,det:'Advanced workflows, segmentation.',m:1},{id:'lbs',n:'List Building Strategy',p:600,det:'Lead magnets, opt-ins, growth tactics.',m:1},{id:'ea',n:'Advanced Analytics',p:400,det:'Heatmaps, conversion tracking, reports.',m:1}]},{id:'portal',n:'Client Hub',p:1500,pm:150,d:'$1,500 + $150/mo',desc:'Real-time project tracking, consolidated analytics, file repository, communication hub. Setup: $1,500 one-time + $150/month access.'},{id:'wl',n:'White Label Add-On',p:0,d:'+20%',pct:20,desc:'Resell our work as your own. Includes NDAs, secure delivery, full confidentiality. Perfect for agencies and consultants.'}];
+var data=[{id:'branding',n:'Branding',p:3500,d:'$3,500',desc:'Build a memorable brand identity. Includes logo suite, strategic positioning, visual guidelines, and core brand elements. Timeline: 3-4 weeks.',a:[{id:'refresh',n:'Refresh Mode',p:-1000,det:'For existing brands; focuses on updates only; 1-2 weeks.'},{id:'bs',n:'Brand Strategy',p:2000,det:'Deep market research, positioning framework; +2-3 weeks.'},{id:'sw',n:'Storytelling Workshop',p:2000,det:'Facilitated session + narrative deck; +1-2 weeks.'},{id:'eg',n:'Extended Guidelines',p:1200,det:'Comprehensive brand book with usage rules; +1 week.'},{id:'ill',n:'Illustrations',p:800,det:'Custom illustration vectors; enhances visuals.'},{id:'icons',n:'Icons (up to 10)',p:400,det:'Custom icon set; enhances visuals.'}]},{id:'print',n:'Print Design',p:1500,d:'$1,500',desc:'Professional print collateral for comprehensive needs (minimum 5 items). Timeline: 2-3 weeks.',a:[{id:'pack',n:'Packaging Per Product Line',p:1200,det:'Custom boxes/labels; dielines included.'},{id:'lf',n:'Large-Format (Set of 3)',p:1000,det:'Banners, posters; event-optimized.'},{id:'pb',n:'Additional Batch (5 items)',p:800,det:'Scale up; volume pricing.'},{id:'prod',n:'Production Coordination',p:600,det:'Vendor liaison/proofs; excludes fees.'}]},{id:'digital',n:'Digital Design',p:1500,d:'$1,500',desc:'Campaign-ready digital assets (up to 10 static designs). Perfect for ads, social, email. Timeline: 1-2 weeks.',a:[{id:'lp',n:'Landing Page (per page)',p:1200,det:'Single conversion-focused page; +1-2 weeks.'},{id:'nt',n:'Newsletter Templates (5)',p:1200,det:'Custom email templates; automation-ready.'},{id:'av',n:'Ad Size Variations (6)',p:1000,det:'Multiple dimensions for same design.'},{id:'anim',n:'Animated HTML5 Ads (10)',p:1800,det:'Dynamic animated banners; +1-2 weeks.'}]},{id:'web',n:'Web Design/Dev',p:4000,d:'$4,000',desc:'Professional business website (up to 5 pages). Responsive design, WordPress/Webflow, basic SEO. Timeline: 4-6 weeks.',a:[{id:'dyn',n:'Dynamic Features',p:2500,det:'Forms, databases, user logins; +2-3 weeks.'},{id:'ec',n:'E-commerce Setup',p:5000,det:'Full shop functionality; +3-4 weeks.'},{id:'saas',n:'SaaS/App Build',p:12000,det:'Custom web app; starting point; +8-12 weeks.'},{id:'ep',n:'Additional Pages (per 5)',p:2000,det:'Expand beyond base 5 pages; +1-2 weeks.'},{id:'mnt',n:'Monthly Maintenance',p:250,det:'Updates, security, support; min 3 months.',m:1}]},{id:'social',n:'SMM',p:1200,d:'$1,200/mo',m:1,desc:'15-20 posts/month on 2 platforms. Content calendar, scheduling, basic engagement. Minimum 6 months.',a:[{id:'ep2',n:'Additional Platform',p:600,det:'10-15 posts/month per platform.',m:1},{id:'psa',n:'Paid Social Ads',p:800,det:'Campaign management; up to $5K spend.',m:1},{id:'ana',n:'Advanced Analytics',p:400,det:'Custom dashboards, ROI tracking.',m:1}]},{id:'ppc',n:'PPC/Display Ads',p:2000,d:'$2,000/mo',m:1,desc:'Campaign setup, 1-2 platforms, up to 10 ad creatives. Minimum 3-6 months. Ad spend excluded.',a:[{id:'dex',n:'Visual/Display Expansion',p:1000,det:'Display network campaigns with creatives.',m:1},{id:'mp',n:'Multi-Platform Expansion',p:1200,det:'Add 2-3 platforms with unified tracking.',m:1},{id:'ret',n:'Retargeting Campaign',p:800,det:'Custom audiences, dynamic ads.',m:1},{id:'asm',n:'Ad Spend Management',p:800,det:'For budgets up to $10K/month.',m:1},{id:'cr',n:'Creative Refresh (10/mo)',p:600,det:'Monthly new ad variations for A/B testing.',m:1}]},{id:'seo',n:'SEO',p:2000,d:'$2,000/mo',m:1,desc:'Audit, keyword strategy, on-page optimization, link building. Minimum 6-12 months.',a:[{id:'sc',n:'Content Creation (4-6/mo)',p:1200,det:'Keyword-optimized articles, 1K-2K words.',m:1},{id:'lb',n:'Link Building Campaign',p:1200,det:'5-10 quality backlinks/month. This covers our outreach work only - link placement costs not included.',m:1},{id:'ts',n:'Advanced Technical SEO',p:600,det:'Site speed, Core Web Vitals, schema.',m:1},{id:'ls',n:'Local SEO',p:600,det:'Google Business, citations, local rankings.',m:1}]},{id:'email',n:'Email Marketing',p:1500,d:'$1,500/mo',m:1,desc:'Sequence setup (4-8 emails), templates, automation, A/B testing. Minimum 3-6 months.',a:[{id:'ee',n:'Sequence Expansion (5-10)',p:1200,det:'Extended drip campaigns; one-time setup.'},{id:'crm',n:'CRM/Platform Integration',p:800,det:'Advanced workflows, segmentation.',m:1},{id:'lbs',n:'List Building Strategy',p:600,det:'Lead magnets, opt-ins, growth tactics.',m:1},{id:'ea',n:'Advanced Analytics',p:400,det:'Heatmaps, conversion tracking, reports.',m:1}]},{id:'portal',n:'Client Hub',p:1500,pm:150,d:'$1,500 + $150/mo',desc:'Real-time project tracking, consolidated analytics, file repository, communication hub. Setup: $1,500 one-time + $150/month access.'},{id:'wl',n:'White Label Add-On',p:0,d:'+20%',pct:20,desc:'Resell our work as your own. Includes NDAs, secure delivery, full confidentiality. Perfect for agencies and consultants.'}];
 window.st={s:new Map(),a:new Map()};
 window.data=data;
 var tiers=[{min:0,max:8000,disc:0,nxt:8000,nd:5},{min:8000,max:13000,disc:5,nxt:13000,nd:10},{min:13000,max:19000,disc:10,nxt:19000,nd:15},{min:19000,max:Infinity,disc:15,nxt:null,nd:null}];
@@ -441,7 +441,6 @@ function goToStep(stepNum) {
   var line1M = document.getElementById('progressLine1Mobile');
   var line2M = document.getElementById('progressLine2Mobile');
   var line3M = document.getElementById('progressLine3Mobile');
-  var stepLabelM = document.getElementById('currentStepLabelMobile');
   
   // Desktop progress bars
   var line1D = document.getElementById('progressLine1Desktop');
@@ -458,13 +457,11 @@ function goToStep(stepNum) {
   if (stepNum === 1) {
     line1M.classList.add('active');
     line1D.classList.add('active');
-    stepLabelM.textContent = 'Calculate Your Estimate';
   } else if (stepNum === 2) {
     line1M.classList.add('completed');
     line2M.classList.add('active');
     line1D.classList.add('completed');
     line2D.classList.add('active');
-    stepLabelM.textContent = 'Share Your Details';
     updateStep2Total();
   } else if (stepNum === 3) {
     line1M.classList.add('completed');
@@ -473,7 +470,6 @@ function goToStep(stepNum) {
     line1D.classList.add('completed');
     line2D.classList.add('completed');
     line3D.classList.add('active');
-    stepLabelM.textContent = 'Book a Call';
   }
   
   window.scrollTo(0, 0);
@@ -495,13 +491,13 @@ function updateStep2Total() {
   
   var displayHTML = '';
   if (data.hasDiscount && data.discountAmount > 0) {
-    displayHTML = '<span style="text-decoration:line-through;color:rgba(255,255,255,.35);font-size:22px;font-weight:400;margin-right:8px">$' + 
+    displayHTML = '<span style="text-decoration:line-through;color:rgba(255,255,255,.35);font-size:26px;font-weight:400;margin-right:8px">$' + 
                   data.oneTimeOriginal.toLocaleString() + 
                   '</span><span style="color:#CFFF54">$' + 
                   data.oneTime.toLocaleString() + 
                   '</span>';
     if (data.monthly > 0) {
-      displayHTML += ' <span style="font-size:22px">+ $' + data.monthly.toLocaleString() + '/mo</span>';
+      displayHTML += ' <span style="font-size:26px">+ $' + data.monthly.toLocaleString() + '/mo</span>';
     }
   } else {
     displayHTML = '$' + data.oneTime.toLocaleString();
@@ -550,6 +546,7 @@ function validateStep2Form() {
   var nameInput = document.querySelector('#step2MobileForm input[name="name"]');
   var emailInput = document.querySelector('#step2MobileForm input[name="email"]');
   var descInput = document.querySelector('#step2MobileForm textarea[name="description"]');
+  var termsCheckbox = document.getElementById('termsCheckbox');
   var continueBtn = document.getElementById('step2MobileContinueBtn');
   
   // Email format validation regex
@@ -558,7 +555,8 @@ function validateStep2Form() {
   var isValid = nameInput.value.trim() !== '' && 
                 emailInput.value.trim() !== '' && 
                 emailRegex.test(emailInput.value.trim()) &&
-                descInput.value.trim() !== '';
+                descInput.value.trim() !== '' &&
+                termsCheckbox.checked;
   
   if (isValid) {
     continueBtn.disabled = false;
@@ -577,6 +575,8 @@ function validateStep2Form() {
     } else if (emailInput.value.trim() !== '' && !emailRegex.test(emailInput.value.trim())) {
       continueBtn.title = 'Please enter a valid email address';
       emailInput.style.borderColor = 'rgba(255,100,100,.5)';
+    } else if (!termsCheckbox.checked) {
+      continueBtn.title = 'Please accept the Terms of Service and Privacy Policy';
     } else {
       continueBtn.title = 'Please fill in all required fields';
     }
@@ -592,10 +592,12 @@ goToStep = function(stepNum) {
       var nameInput = document.querySelector('#step2MobileForm input[name="name"]');
       var emailInput = document.querySelector('#step2MobileForm input[name="email"]');
       var descInput = document.querySelector('#step2MobileForm textarea[name="description"]');
+      var termsCheckbox = document.getElementById('termsCheckbox');
       
       if (nameInput) nameInput.addEventListener('input', validateStep2Form);
       if (emailInput) emailInput.addEventListener('input', validateStep2Form);
       if (descInput) descInput.addEventListener('input', validateStep2Form);
+      if (termsCheckbox) termsCheckbox.addEventListener('change', validateStep2Form);
       
       validateStep2Form();
     }, 100);
@@ -728,7 +730,7 @@ function populateStep3Summary() {
     if (k === 'wl' || k === 'portal_m') return;
     var svc = window.data.find(function(s) { return s.id === k; });
     var pr = v.m ? '$' + v.p + '/mo' : '$' + v.p.toLocaleString();
-    var html = '<div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:rgba(255,255,255,.85)">' + svc.n + '</span><span style="font-weight:500;color:#fff">' + pr + '</span></div>';
+    var html = '<div style="display:flex;justify-content:space-between;font-size:16px"><span style="color:rgba(255,255,255,.85)">' + svc.n + '</span><span style="font-weight:500;color:#fff">' + pr + '</span></div>';
     
     if (serviceIndex < 2) {
       servicesVisible.push(html);
@@ -749,7 +751,7 @@ function populateStep3Summary() {
     if (!addon) return;
     var pr = v.m ? '$' + Math.abs(v.p) + '/mo' : '$' + Math.abs(v.p).toLocaleString();
     var sign = v.p < 0 ? '- ' : '+ ';
-    var html = '<div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:rgba(255,255,255,.65);padding-left:12px">• ' + addon.n + '</span><span style="font-weight:500;color:#fff">' + sign + pr + '</span></div>';
+    var html = '<div style="display:flex;justify-content:space-between;font-size:16px"><span style="color:rgba(255,255,255,.65);padding-left:12px">• ' + addon.n + '</span><span style="font-weight:500;color:#fff">' + sign + pr + '</span></div>';
     
     if (serviceIndex < 2) {
       servicesVisible.push(html);
@@ -760,7 +762,7 @@ function populateStep3Summary() {
   });
   
   if (window.st.s.has('wl')) {
-    var html = '<div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:rgba(255,255,255,.85)">White Label</span><span style="font-weight:500;color:#fff">+20%</span></div>';
+    var html = '<div style="display:flex;justify-content:space-between;font-size:16px"><span style="color:rgba(255,255,255,.85)">White Label</span><span style="font-weight:500;color:#fff">+20%</span></div>';
     if (serviceIndex < 2) {
       servicesVisible.push(html);
     } else {
@@ -774,7 +776,7 @@ function populateStep3Summary() {
   var toggleEl = document.getElementById('step3ServicesToggle');
   
   if (servicesVisible.length === 0) {
-    visibleEl.innerHTML = '<div style="font-size:14px;color:rgba(255,255,255,.4)">No services selected</div>';
+    visibleEl.innerHTML = '<div style="font-size:16px;color:rgba(255,255,255,.4)">No services selected</div>';
     hiddenEl.style.display = 'none';
     toggleEl.style.display = 'none';
   } else {
@@ -1078,7 +1080,12 @@ function loadCalendar() {
     // Update title and show confirmation text
     document.getElementById('step3Title').textContent = "You're all set!";
     document.getElementById('step3ConfirmationText').style.display = 'block';
-    document.getElementById('currentStepLabelMobile').textContent = "You're all set!";
+    
+    // Show Back to Homepage button
+    var backHomeBtn = document.getElementById('step3BackHomeBtn');
+    if (backHomeBtn) {
+      backHomeBtn.style.display = 'block';
+    }
     
     // Turn progress bars green (both mobile and desktop)
     document.getElementById('progressLine3Mobile').classList.add('completed');
