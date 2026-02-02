@@ -541,6 +541,22 @@ document.getElementById('step2MobileBackBtn').addEventListener('click', function
   goToStep(1);
 });
 
+// Terms checkbox toggle function
+window.toggleTermsCheckbox = function() {
+  var checkbox = document.getElementById('termsCheckbox');
+  var customCheckbox = document.getElementById('termsCheckboxCustom');
+  
+  checkbox.checked = !checkbox.checked;
+  
+  if (checkbox.checked) {
+    customCheckbox.classList.add('on');
+  } else {
+    customCheckbox.classList.remove('on');
+  }
+  
+  validateStep2Form();
+};
+
 // Step 2 form validation
 function validateStep2Form() {
   var nameInput = document.querySelector('#step2MobileForm input[name="name"]');
