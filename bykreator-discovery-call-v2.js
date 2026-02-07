@@ -405,11 +405,70 @@ e.stopPropagation();
 closeCartMobile();
 });
 document.getElementById('mobileOverlay').addEventListener('click',closeCartMobile);
+
+// ===== ADD SWIPE FUNCTIONALITY =====
+setTimeout(function() {
+var panel = document.getElementById('mobilePanel');
+var header = document.getElementById('mobilePanelHeader');
+    
+if (!panel || !header) return;
+    
+var startY = 0;
+var currentY = 0;
+var isDragging = false;
+var startTime = 0;
+    
+header.addEventListener('touchstart', function(e) {
+startY = e.touches[0].clientY;
+currentY = startY;
+isDragging = true;
+startTime = Date.now();
+}, { passive: true });
+    
+header.addEventListener('touchmove', function(e) {
+if (!isDragging) return;
+currentY = e.touches[0].clientY;
+}, { passive: true });
+    
+header.addEventListener('touchend', function(e) {
+if (!isDragging) return;
+      
+var endTime = Date.now();
+var timeDiff = endTime - startTime;
+var deltaY = currentY - startY;
+var isOpen = panel.classList.contains('open');
+      
+isDragging = false;
+      
+// Ignore if it's a quick tap (less than 200ms and less than 10px movement)
+if (timeDiff < 200 && Math.abs(deltaY) < 10) {
+startY = 0;
+currentY = 0;
+return; // Let the existing click handler deal with it
+}
+      
+// Check if it's a significant swipe (more than 50px)
+if (Math.abs(deltaY) > 50) {
+if (isOpen && deltaY > 0) {
+// Swiped down while open - close
+closeCartMobile();
+} else if (!isOpen && deltaY < 0) {
+// Swiped up while closed - open
+toggleCartMobile();
+}
+}
+      
+startY = 0;
+currentY = 0;
+});
+}, 500);
 }else{
 initDesktop();
 }
 });
 })();
+
+// Multi-step navigation (rest of the file continues...)
 
 // Multi-step navigation
 function goToStep(stepNum) {
