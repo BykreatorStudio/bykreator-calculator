@@ -1,9 +1,133 @@
 (function(){
 
 // ============================================================
-// CONFIG — defaults to EN/USD. Override via window.calcConfig
+// AUTO-DETECT LOCALE FROM URL
+// /rs in pathname → Serbian/EUR, otherwise EN/USD
+// Can still be overridden manually via window.calcConfig
 // ============================================================
-var cfg = window.calcConfig || {};
+var isRS = window.location.pathname.indexOf('/rs') !== -1;
+
+var RS_CONFIG = {
+  locale: 'rs',
+  currency: 'eur',
+  moLabel: '/mes',
+  workerUrl: 'https://bykreator-calendar.bykreator.workers.dev',
+  tiers: [
+    {min:0,     max:6000,    disc:0,  nxt:6000,  nd:5},
+    {min:6000,  max:10000,   disc:5,  nxt:10000, nd:10},
+    {min:10000, max:13000,   disc:10, nxt:13000, nd:15},
+    {min:13000, max:Infinity,disc:15, nxt:null,  nd:null}
+  ],
+  data: [
+    {id:'branding',n:'Brending',p:2000,d:'2.000€',desc:'Izgradite prepoznatljiv brend identitet. Uključuje komplet logoa, strateško pozicioniranje, vizuelne smernice i osnovne brend elemente. Rok: 3-4 nedelje.',a:[
+      {id:'refresh',n:'Redizajn',p:-600,det:'Za postojeće brendove; fokus na osvežavanju; 1-2 nedelje.'},
+      {id:'bs',n:'Brend Strategija',p:1200,det:'Dubinsko istraživanje tržišta, okvir pozicioniranja; +2-3 nedelje.'},
+      {id:'sw',n:'Storytelling Radionica',p:1200,det:'Vođena sesija + narativna prezentacija; +1-2 nedelje.'},
+      {id:'eg',n:'Proširene Smernice',p:700,det:'Sveobuhvatna brend knjiga sa pravilima korišćenja; +1 nedelja.'},
+      {id:'ill',n:'Ilustracije',p:500,det:'Prilagođeni vektorski ilustracije; unapređuje vizuale.'},
+      {id:'icons',n:'Ikonice',p:200,det:'Prilagođeni set ikona; unapređuje vizuale.'}
+    ]},
+    {id:'print',n:'Štampani Dizajn',p:1000,d:'1.000€',desc:'Profesionalni štampani materijali za sveobuhvatne potrebe (minimum 5 stavki). Rok: 2-3 nedelje.',a:[
+      {id:'pack',n:'Pakovanje po Liniji Proizvoda',p:800,det:'Prilagođene kutije/etikete; tehnička dokumentacija uključena.'},
+      {id:'lf',n:'Veliki Format (Set od 3)',p:700,det:'Baneri, posteri; optimizovano za događaje.'},
+      {id:'pb',n:'Dodatna Serija (5 stavki)',p:500,det:'Povećanje obima; povoljnija cena.'},
+      {id:'prod',n:'Koordinacija Produkcije',p:400,det:'Komunikacija sa dobavljačima/probe; bez dodatnih naknada.'}
+    ]},
+    {id:'digital',n:'Digitalni Dizajn',p:1000,d:'1.000€',desc:'Digitalni materijali spremni za kampanje (do 10 statičnih dizajna). Idealno za oglase, društvene mreže i email. Rok: 1-2 nedelje.',a:[
+      {id:'lp',n:'Landing Stranica (po stranici)',p:800,det:'Jedna stranica fokusirana na konverziju; +1-2 nedelje.'},
+      {id:'nt',n:'Šabloni za Newsletter (5)',p:800,det:'Prilagođeni email šabloni; spremni za automatizaciju.'},
+      {id:'av',n:'Varijacije Formata Oglasa (6)',p:700,det:'Više dimenzija za isti dizajn.'},
+      {id:'anim',n:'Animirani HTML5 Oglasi (10)',p:1200,det:'Dinamični animirani baneri; +1-2 nedelje.'}
+    ]},
+    {id:'web',n:'Web Dizajn/Izrada',p:3000,d:'3.000€',desc:'Profesionalni web sajt (do 5 stranica). Responzivan dizajn, WordPress/Webflow, osnovno SEO. Rok: 4-6 nedelja.',a:[
+      {id:'dyn',n:'Dinamičke Funkcionalnosti',p:2000,det:'Forme, baze podataka, korisnički nalozi; +2-3 nedelje.'},
+      {id:'ec',n:'E-commerce Postavka',p:4000,det:'Potpuna funkcionalnost prodavnice; +3-4 nedelje.'},
+      {id:'saas',n:'SaaS/App Razvoj',p:9000,det:'Prilagođena web aplikacija; polazna tačka; +8-12 nedelja.'},
+      {id:'ep',n:'Dodatne Stranice (po 5)',p:1500,det:'Proširenje izvan osnovnih 5 stranica; +1-2 nedelje.'},
+      {id:'mnt',n:'Mesečno Održavanje',p:150,det:'Ažuriranja, bezbednost, podrška; min 3 meseca.',m:1}
+    ]},
+    {id:'social',n:'Marketing na Društvenim Mrežama',p:800,d:'800€/mes',m:1,desc:'15-20 objava mesečno na 2 platforme. Kalendar sadržaja, zakazivanje, osnovno angažovanje. Minimum 6 meseci.',a:[
+      {id:'ep2',n:'Dodatna Platforma',p:400,det:'10-15 objava mesečno po platformi.',m:1},
+      {id:'psa',n:'Plaćeni Oglasi na Društvenim Mrežama',p:500,det:'Upravljanje kampanjom; do 5.000€ potrošnje.',m:1},
+      {id:'ana',n:'Napredna Analitika',p:300,det:'Prilagođeni dashboard, praćenje ROI.',m:1}
+    ]},
+    {id:'ppc',n:'PPC/Display Oglašavanje',p:1200,d:'1.200€/mes',m:1,desc:'Postavljanje kampanje, 1-2 platforme, do 10 kreativa. Minimum 3-6 meseci. Budžet za oglase nije uključen.',a:[
+      {id:'dex',n:'Vizuelno/Display Proširenje',p:600,det:'Display kampanje sa reklamnim materijalima.',m:1},
+      {id:'mp',n:'Proširenje na Više Platformi',p:700,det:'Dodavanje 2-3 platforme sa jedinstvenim praćenjem.',m:1},
+      {id:'ret',n:'Retargeting Kampanja',p:500,det:'Prilagođene publike, dinamični oglasi.',m:1},
+      {id:'asm',n:'Upravljanje Budžetom za Oglase',p:500,det:'Za budžete do 10.000€ mesečno.',m:1},
+      {id:'cr',n:'Novi Oglasi Mesečno (10/mes)',p:400,det:'Mesečne nove varijacije oglasa za A/B testiranje.',m:1}
+    ]},
+    {id:'seo',n:'SEO Optimizacija',p:1400,d:'1.400€/mes',m:1,desc:'Audit, strategija ključnih reči, on-page optimizacija, izgradnja linkova. Minimum 6-12 meseci.',a:[
+      {id:'sc',n:'Kreiranje Sadržaja (4-6/mes)',p:800,det:'Članci optimizovani za ključne reči, 1.000-2.000 reči.',m:1},
+      {id:'lb',n:'Kampanja Izgradnje Linkova',p:800,det:'5-10 kvalitetnih backlinkova mesečno. Ovo pokriva samo naš outreach rad - troškovi plasmana linkova nisu uključeni.',m:1},
+      {id:'ts',n:'Napredni Tehnički SEO',p:400,det:'Brzina sajta, Core Web Vitals, schema.',m:1},
+      {id:'ls',n:'Lokalni SEO',p:400,det:'Google Business, citati, lokalni rankovi.',m:1}
+    ]},
+    {id:'email',n:'Email Marketing',p:1000,d:'1.000€/mes',m:1,desc:'Postavljanje sekvence (4-8 emailova), šabloni, automatizacija, A/B testiranje. Minimum 3-6 meseci.',a:[
+      {id:'ee',n:'Proširenje Sekvence (5-10)',p:800,det:'Proširene drip kampanje; jednokratno postavljanje.'},
+      {id:'crm',n:'CRM/Integracija Platformi',p:500,det:'Napredni tokovi rada, segmentacija.',m:1},
+      {id:'lbs',n:'Strategija Izgradnje Liste',p:400,det:'Lead magneti, opt-in forme, taktike rasta.',m:1},
+      {id:'ea',n:'Napredna Analitika',p:300,det:'Heatmape, praćenje konverzija, izveštaji.',m:1}
+    ]},
+    {id:'portal',n:'Klijentski Portal',p:1000,pm:100,d:'1.000€ + 100€/mes',desc:'Praćenje projekta u realnom vremenu, konsolidovana analitika, repozitorijum fajlova, komunikacijski hub. Postavka: 1.000€ jednokratno + 100€ mesečno.'},
+    {id:'wl',n:'White Label Dodatak',p:0,d:'+20%',pct:20,desc:'Preprodajte naš rad kao svoj. Uključuje NDA ugovore, sigurnu isporuku i potpunu poverljivost. Idealno za agencije i konsultante.'}
+  ],
+  ui: {
+    from:'od',addons:'Dodaci',addonCol:'DODATAK',priceCol:'CENA',detailsCol:'DETALJI',
+    disclaimer:'*Konačna cena se određuje nakon uvodnog poziva, u zavisnosti od obima i zahteva projekta.',
+    discountInfo:function(nxt,nd){return 'Dostignite <strong>'+nxt+'</strong> za <strong>'+nd+'% popusta</strong> na jednokratne projekte.';},
+    discountUnlocked:'<strong>15% popust</strong> otključan na jednokratne projekte!',
+    discReachShort:function(nxt,nd){return 'Dostignite '+nxt+' za '+nd+'% popusta';},
+    discUnlockedShort:'15% popust otključan!',
+    discReachLong:function(nxt,nd){return 'Dostignite '+nxt+' za '+nd+'% popusta na jednokratne projekte';},
+    discUnlockedLong:'15% popust otključan na jednokratne projekte!',
+    discApplied:function(d){return d+'% popust primenjen';},
+    discAppliedBadge:function(d){return d+'% popusta';},
+    discountAppliesInfo:'Popust se primenjuje samo na jednokratne projekte',
+    selectServices:'Izaberite usluge da vidite procenu',
+    yourSelection:'Vaš Izbor',subtotal:'Međuzbir:',discount:'Popust:',total:'Ukupno:',
+    items:function(n){return n+' stavk'+(n===1?'a':(n>=2&&n<=4?'e':'i'));},
+    ctaBtn:'Zakažite Uvodni Poziv',ctaDisabled:'Molimo izaberite bar jednu uslugu da nastavite',
+    note:'Sve cene su okvirne i podložne promenama. Konačna cena se potvrđuje nakon uvodnog poziva.',
+    calcTitle:'Procenite budžet',step2Title:'Podelite informacije',yourEstimate:'Vaša procena',
+    namePlaceholder:'Marko Marković',emailPlaceholder:'marko@kompanija.com',companyPlaceholder:'Kompanija d.o.o.',
+    nameLabel:'Ime i Prezime',emailLabel:'Email Adresa',companyLabel:'Naziv Kompanije',
+    projectLabel:'Recite nam o Vašem projektu',projectPlaceholder:'Opišite ukratko Vaš projekat...',
+    termsText:'Slažem se sa <a href="https://bykreator.com/terms-of-services" target="_blank" style="color:#CFFF54;text-decoration:none;font-weight:400" onclick="event.stopPropagation()">uslovima poslovanja</a> i <a href="https://bykreator.com/privacy-policy" target="_blank" style="color:#CFFF54;text-decoration:none;font-weight:400" onclick="event.stopPropagation()">Politikom privatnosti</a><span style="color:#fff;margin-left:2px">*</span>',
+    continueBtn:'Nastavi na Zakazivanje',backLink:'Nazad',
+    formNote:'Vaši podaci su bezbedni i koristiće se isključivo za pripremu uvodnog poziva.',
+    validationFill:'Molimo popunite sva obavezna polja',validationEmail:'Molimo unesite ispravnu email adresu',
+    validationTerms:'Molimo prihvatite uslove poslovanja i Politiku privatnosti',
+    oneTimeLabel:'jednokratno',retainerLabel:'/mes retainer',discountLabel:'popust primenjen',
+    step3Title:'Zakažite Poziv',allSet:'Sve je spremno!',
+    confirmText:'Proverite inbox za kalendarski poziv i link za sastanak. Ako ga ne vidite u narednih nekoliko minuta, pogledajte spam ili promotions folder. Jedva čekamo da razgovaramo o Vašem projektu!',
+    backHome:'Nazad na Početnu',summaryTitle:'Pregled',nameField:'Ime',emailField:'Email',
+    companyField:'Kompanija',callScheduled:'Poziv zakazan',timeField:'Vreme',messageField:'Poruka',
+    viewFullMsg:'Prikaži celu poruku',showLess:'Prikaži manje',servicesField:'Usluge',
+    noServices:'Nije izabrana nijedna usluga',
+    viewMore:function(n){return 'Prikaži još '+n+' uslug'+(n===1?'u':(n>=2&&n<=4?'e':'a'));},
+    subtotalField:'Međuzbir',discountField:'Popust',estimateField:'Procena',
+    calendarTitle:'Izaberite Datum i Vreme',
+    calendarSubtitle:'30-minutni uvodni poziv (vreme prikazano u Vašoj vremenskoj zoni)',
+    prevMonth:'← Prethodni',nextMonth:'Sledeći →',changeDate:'Promeni datum',
+    loadingDates:'Učitavanje dostupnih datuma...',loadingSlots:'Učitavanje termina...',
+    noSlots:'Nema dostupnih termina za ovaj datum',
+    slotsError:'Greška pri učitavanju termina. Pokušajte ponovo.',
+    bookBtn:'Zakažite Uvodni Poziv',bookBtnDisabled:'Molimo izaberite datum i vreme',
+    bookingBtn:'Zakazivanje...',
+    availableFor:function(d){return 'Dostupni termini za '+d;},
+    days:['Ned','Pon','Uto','Sre','Čet','Pet','Sub'],dateLocale:'sr-RS',
+    bookingError:'Greška pri zakazivanju. Pokušajte ponovo ili nas kontaktirajte direktno.',
+    bookingFailed:function(e){return 'Zakazivanje nije uspelo: '+e;},
+    portalMonthly:'Klijentski Portal (Mesečno)',whiteLabel:'White Label',whiteLabelPrice:'+20%',
+    clientHubMonthly:function(p){return 'Klijentski Portal - Mesečno ('+p+'€/mes)';},
+    back:'Nazad'
+  }
+};
+
+// Use RS config if /rs in URL, manual window.calcConfig always wins
+var cfg = window.calcConfig || (isRS ? RS_CONFIG : {});
 
 var locale   = cfg.locale   || 'en';
 var currency = cfg.currency || 'usd';
