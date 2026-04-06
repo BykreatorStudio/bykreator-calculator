@@ -88,36 +88,36 @@ var RS_CONFIG = {
     selectServices:'Izaberite usluge da vidite procenu',
     yourSelection:'Vaš Izbor',subtotal:'Međuzbir:',discount:'Popust:',total:'Ukupno:',
     items:function(n){return n+' stavk'+(n===1?'a':(n>=2&&n<=4?'e':'i'));},
-    ctaBtn:'Zakažite Uvodni Poziv',ctaDisabled:'Molimo izaberite bar jednu uslugu da nastavite',
-    note:'Sve cene su okvirne i podložne promenama. Konačna cena se potvrđuje nakon uvodnog poziva.',
+    ctaBtn:'Zakažite Uvodni Sastanak',ctaDisabled:'Molimo izaberite bar jednu uslugu da nastavite',
+    note:'Sve cene su okvirne i podložne promenama. Konačna cena se potvrđuje nakon uvodnog sastanka.',
     calcTitle:'Procenite budžet',step2Title:'Podelite informacije',yourEstimate:'Vaša procena',
     namePlaceholder:'Marko Marković',emailPlaceholder:'marko@kompanija.com',companyPlaceholder:'Kompanija d.o.o.',
     nameLabel:'Ime i Prezime',emailLabel:'Email Adresa',companyLabel:'Naziv Kompanije',
     projectLabel:'Recite nam o Vašem projektu',projectPlaceholder:'Opišite ukratko Vaš projekat...',
-    termsText:'Slažem se sa <a href="https://bykreator.com/terms-of-services" target="_blank" style="color:#CFFF54;text-decoration:none;font-weight:400" onclick="event.stopPropagation()">uslovima poslovanja</a> i <a href="https://bykreator.com/privacy-policy" target="_blank" style="color:#CFFF54;text-decoration:none;font-weight:400" onclick="event.stopPropagation()">Politikom privatnosti</a><span style="color:#fff;margin-left:2px">*</span>',
+    termsText:'Slažem se sa <a href="https://bykreator.com/rs/politika-poslovanja" target="_blank" style="color:#CFFF54;text-decoration:none;font-weight:400" onclick="event.stopPropagation()">politikom poslovanja</a> i <a href="https://bykreator.com/rs/politika-privatnosti" target="_blank" style="color:#CFFF54;text-decoration:none;font-weight:400" onclick="event.stopPropagation()">politikom privatnosti</a><span style="color:#fff;margin-left:2px">*</span>',
     continueBtn:'Nastavi na Zakazivanje',backLink:'Nazad',
-    formNote:'Vaši podaci su bezbedni i koristiće se isključivo za pripremu uvodnog poziva.',
+    formNote:'Vaši podaci su bezbedni i koristiće se isključivo za pripremu uvodnog sastanka.',
     validationFill:'Molimo popunite sva obavezna polja',validationEmail:'Molimo unesite ispravnu email adresu',
     validationTerms:'Molimo prihvatite uslove poslovanja i Politiku privatnosti',
-    oneTimeLabel:'jednokratno',retainerLabel:'/mes retainer',discountLabel:'popust primenjen',
-    step3Title:'Zakažite Poziv',allSet:'Sve je spremno!',
-    confirmText:'Proverite inbox za kalendarski poziv i link za sastanak. Ako ga ne vidite u narednih nekoliko minuta, pogledajte spam ili promotions folder. Jedva čekamo da razgovaramo o Vašem projektu!',
+    oneTimeLabel:'jednokratno',retainerLabel:'retainer',discountLabel:'popust primenjen',
+    step3Title:'Zakažite Sastanak',allSet:'Sve je spremno!',
+    confirmText:'Proverite inbox za uvodni sastanak i link za Google Meet. Ako ga ne vidite u narednih nekoliko minuta, pogledajte spam ili promotions folder. Jedva čekamo da razgovaramo o Vašem projektu!',
     backHome:'Nazad na Početnu',summaryTitle:'Pregled',nameField:'Ime',emailField:'Email',
-    companyField:'Kompanija',callScheduled:'Poziv zakazan',timeField:'Vreme',messageField:'Poruka',
+    companyField:'Kompanija',callScheduled:'Sastanak zakazan',timeField:'Vreme',messageField:'Poruka',
     viewFullMsg:'Prikaži celu poruku',showLess:'Prikaži manje',servicesField:'Usluge',
     noServices:'Nije izabrana nijedna usluga',
     viewMore:function(n){return 'Prikaži još '+n+' uslug'+(n===1?'u':(n>=2&&n<=4?'e':'a'));},
     subtotalField:'Međuzbir',discountField:'Popust',estimateField:'Procena',
     calendarTitle:'Izaberite Datum i Vreme',
-    calendarSubtitle:'30-minutni uvodni poziv (vreme prikazano u Vašoj vremenskoj zoni)',
+    calendarSubtitle:'30-minutni uvodni sastanak (vreme prikazano u Vašoj vremenskoj zoni)',
     prevMonth:'← Prethodni',nextMonth:'Sledeći →',changeDate:'Promeni datum',
     loadingDates:'Učitavanje dostupnih datuma...',loadingSlots:'Učitavanje termina...',
     noSlots:'Nema dostupnih termina za ovaj datum',
     slotsError:'Greška pri učitavanju termina. Pokušajte ponovo.',
-    bookBtn:'Zakažite Uvodni Poziv',bookBtnDisabled:'Molimo izaberite datum i vreme',
+    bookBtn:'Zakažite Uvodni Sastanak',bookBtnDisabled:'Molimo izaberite datum i vreme',
     bookingBtn:'Zakazivanje...',
     availableFor:function(d){return 'Dostupni termini za '+d;},
-    days:['Ned','Pon','Uto','Sre','Čet','Pet','Sub'],dateLocale:'sr-RS',
+    days:['Ned','Pon','Uto','Sre','Čet','Pet','Sub'],dateLocale:'sr-Latn-RS',timeHour12:false,
     bookingError:'Greška pri zakazivanju. Pokušajte ponovo ili nas kontaktirajte direktno.',
     bookingFailed:function(e){return 'Zakazivanje nije uspelo: '+e;},
     portalMonthly:'Klijentski Portal (Mesečno)',whiteLabel:'White Label',whiteLabelPrice:'+20%',
@@ -1219,7 +1219,8 @@ function loadCalendar(){
     grid.innerHTML=''; availableSlots=slots;
     slots.forEach(function(slot){
       var btn=document.createElement('button');
-      btn.textContent=new Date(slot.start).toLocaleTimeString(dateLocale,{hour:'numeric',minute:'2-digit',hour12:true});
+      var h12=ui6.timeHour12!==undefined?ui6.timeHour12:true;
+      btn.textContent=new Date(slot.start).toLocaleTimeString(dateLocale,{hour:h12?'numeric':'2-digit',minute:'2-digit',hour12:h12});
       btn.dataset.time=slot.start;
       var isSel=selectedTime===slot.start;
       var s='padding:12px;border-radius:8px;font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s;';
@@ -1288,7 +1289,8 @@ function loadCalendar(){
     if(ch[2]) ch[2].style.display='none'; if(ch[3]) ch[3].style.display='none';
     document.getElementById('step3BookingDetails').style.display='flex';
     document.getElementById('step3BookedDate').textContent=new Date(selectedDate).toLocaleDateString(dateLocale,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-    document.getElementById('step3BookedTime').textContent=new Date(selectedTime).toLocaleTimeString(dateLocale,{hour:'numeric',minute:'2-digit',hour12:true});
+    var h12b=ui6.timeHour12!==undefined?ui6.timeHour12:true;
+    document.getElementById('step3BookedTime').textContent=new Date(selectedTime).toLocaleTimeString(dateLocale,{hour:h12b?'numeric':'2-digit',minute:'2-digit',hour12:h12b});
     var sc=document.getElementById('step3SummaryContent'), st=document.getElementById('step3SummaryToggle');
     sc.style.maxHeight='9999px'; sc.style.overflow='visible'; sc.style.transition='none';
     var mt=document.getElementById('step3MessageToggle');
