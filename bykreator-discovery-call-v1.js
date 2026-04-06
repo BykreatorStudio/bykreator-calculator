@@ -1268,7 +1268,7 @@ function loadCalendar(){
 
     fetch(WORKER_URL+'/api/book',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:formData.get('name'),email:formData.get('email'),company:formData.get('company')||'N/A',description:formData.get('description'),start:selectedTime,end:selectedSlot?selectedSlot.end:new Date(new Date(selectedTime).getTime()+30*60000).toISOString(),notes:notesText})
+      body:JSON.stringify({name:formData.get('name'),email:formData.get('email'),company:formData.get('company')||'N/A',description:formData.get('description'),start:selectedTime,end:selectedSlot?selectedSlot.end:new Date(new Date(selectedTime).getTime()+30*60000).toISOString(),notes:notesText,locale:cfg6.locale||'en'})
     })
     .then(function(r){return r.json();})
     .then(function(d){
