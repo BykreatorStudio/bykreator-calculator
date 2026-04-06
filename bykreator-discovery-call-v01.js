@@ -744,9 +744,9 @@ function patchUI(){
   function qs(sel){ return document.querySelector(sel); }
 
   // Step 1 titles
-  var s1mh2=qs('#step1 .mobile-calc h1')||qs('#step1 .mobile-calc h2'), s1dh2=qs('#step1 .desktop-calc h1')||qs('#step1 .desktop-calc h2');
-  if(s1mh2) s1mh2.textContent=ui.calcTitle;
-  if(s1dh2) s1dh2.textContent=ui.calcTitle;
+  var s1m=el('step1TitleMobile'), s1d=el('step1TitleDesktop');
+  if(s1m) s1m.textContent=ui.calcTitle;
+  if(s1d) s1d.textContent=ui.calcTitle;
 
   // "Your Selection" labels
   var expTitle=qs('.expanded-title'), sideTitle=qs('.side-title');
@@ -783,8 +783,8 @@ function patchUI(){
   document.head.appendChild(styleEl);
 
   // Step 2 header
-  var s2h2=qs('#step2 h1')||qs('#step2 h2');
-  if(s2h2) s2h2.textContent=ui.step2Title;
+  var s2h=el('step2TitleHead');
+  if(s2h) s2h.textContent=ui.step2Title;
 
   // "Your estimate" label (sibling before step2MobileTotalAmount)
   var amtEl=el('step2MobileTotalAmount');
