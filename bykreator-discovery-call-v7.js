@@ -116,7 +116,7 @@ var RS_CONFIG = {
     slotsError:'Greška pri učitavanju termina. Pokušajte ponovo.',
     bookBtn:'Zakažite Uvodni Sastanak',bookBtnDisabled:'Molimo izaberite datum i vreme',
     bookingBtn:'Zakazivanje...',
-    availableFor:function(d){return 'Dostupni termini za '+d;},
+    availableFor:function(d){return 'Dostupni termini za: '+d;},
     days:['Ned','Pon','Uto','Sre','Čet','Pet','Sub'],dateLocale:'sr-Latn-RS',timeHour12:false,
     bookingError:'Greška pri zakazivanju. Pokušajte ponovo ili nas kontaktirajte direktno.',
     bookingFailed:function(e){return 'Zakazivanje nije uspelo: '+e;},
@@ -820,7 +820,7 @@ function patchUI(){
 
   // Back to Homepage
   var s3home=qs('#step3BackHomeBtn a');
-  if(s3home) s3home.textContent=ui.backHome;
+  if(s3home){ s3home.textContent=ui.backHome; s3home.href='/rs'; }
 
   // Summary title
   var s3sum=qs('#step3SummaryToggle div:first-child');
@@ -849,7 +849,7 @@ function patchUI(){
   // Pricing labels
   var stLabel=qs('#step3SubtotalRow span:first-child');
   var discLabel=qs('#step3DiscountRow span:first-child');
-  var estLabel=el('step3Total')&&el('step3Total').closest('[style]')&&el('step3Total').closest('[style]').querySelector('span');
+  var estLabel=el('step3Total')&&el('step3Total').previousElementSibling;
   if(stLabel) stLabel.textContent=ui.subtotalField;
   if(discLabel) discLabel.textContent=ui.discountField;
   if(estLabel) estLabel.textContent=ui.estimateField;
