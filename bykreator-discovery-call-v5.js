@@ -128,6 +128,7 @@ var RS_CONFIG = {
 
 // Use RS config if /rs in URL, manual window.calcConfig always wins
 var cfg = window.calcConfig || (isRS ? RS_CONFIG : {});
+if (isRS && !window.calcConfig) window.calcConfig = RS_CONFIG;
 
 var locale   = cfg.locale   || 'en';
 var currency = cfg.currency || 'usd';
@@ -298,7 +299,7 @@ function fmt(n) {
 
 function fmtK(n) {
   if (currency === 'eur') {
-    return (n/1000).toFixed(0) + 'k€';
+    return fmt(n);
   }
   return '$' + (n/1000).toFixed(0) + 'k';
 }
@@ -330,7 +331,7 @@ function initMobile(){
         '<div class="svc-name" onclick="toggleServiceMobile(\''+s.id+'\')">'+s.n+'</div>' +
         '<div style="flex:1;min-height:20px" onclick="toggleExpandMobile(\''+s.id+'\')"></div>' +
         '<div class="svc-price-wrap" onclick="toggleExpandMobile(\''+s.id+'\')">' +
-          '<div class="from">'+ui.from+'</div>' +
+          (s.id!=='wl'?'<div class="from">'+ui.from+'</div>':'') +
           '<div class="svc-price">'+priceDisplay+'</div>' +
         '</div>' +
         (s.a||s.desc ? '<svg class="arrow" id="marr'+s.id+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:0" onclick="toggleExpandMobile(\''+s.id+'\')"><path d="M6 9l6 6 6-6"/></svg>' : '') +
@@ -380,7 +381,7 @@ function initDesktop(){
         '<div class="svc-info">' +
           '<div class="svc-header">' +
             '<div class="svc-name" onclick="event.stopPropagation();toggleServiceDesktop(\''+s.id+'\')" style="cursor:pointer">'+s.n+'</div>' +
-            '<div class="svc-price-box"><div class="from">'+ui.from+'</div><div class="svc-price">'+priceDisplay+'</div></div>' +
+            '<div class="svc-price-box">'+(s.id!=='wl'?'<div class="from">'+ui.from+'</div>':'')+'<div class="svc-price">'+priceDisplay+'</div></div>' +
           '</div>' +
           (s.a ?
             '<div class="addons" id="dad'+s.id+'">' +
@@ -686,7 +687,7 @@ function updateSidebarDesktop(otf, mo, disc, tier, prog){
   });
 
   document.getElementById('desktopDiscInfo').innerHTML = tier.nxt
-    ? '<span>'+ui.discountInfo(tier.nxt, tier.nd)+'</span><div class="info-icon">i</div>'
+    ? '<span>'+ui.discountInfo(fmtK(tier.nxt), tier.nd)+'</span><div class="info-icon">i</div>'
     : '<span>'+ui.discountUnlocked+'</span><div class="info-icon">i</div>';
 
   if(tier.disc>0){
@@ -736,9 +737,153 @@ window.closeCartMobile = function(){
 };
 
 // ============================================================
+// PATCH STATIC HTML FOR RS LOCALE
+// ============================================================
+function patchUI(){
+  function el(id){ return document.getElementById(id); }
+  function qs(sel){ return document.querySelector(sel); }
+
+  // Step 1 titles
+  var s1mh2=qs('#step1 .mobile-calc h2'), s1dh2=qs('#step1 .desktop-calc h2');
+  if(s1mh2) s1mh2.textContent=ui.calcTitle;
+  if(s1dh2) s1dh2.textContent=ui.calcTitle;
+
+  // "Your Selection" labels
+  var expTitle=qs('.expanded-title'), sideTitle=qs('.side-title');
+  if(expTitle) expTitle.textContent=ui.yourSelection;
+  if(sideTitle) sideTitle.textContent=ui.yourSelection;
+
+  // CTA buttons
+  var mCta=el('mobileCtaBtn'), dCta=el('desktopCtaBtn');
+  if(mCta) mCta.textContent=ui.ctaBtn;
+  if(dCta) dCta.textContent=ui.ctaBtn;
+
+  // Notes in step 1
+  var cartNote=qs('.cart-panel-footer .note'), sideNote=qs('.side-cta-wrapper .note');
+  if(cartNote) cartNote.textContent=ui.note;
+  if(sideNote) sideNote.textContent=ui.note;
+
+  // Subtotal / Discount / Total labels
+  var mSt=qs('#mobileSubtotalBox .subtotal-line span:first-child');
+  var mDi=qs('#mobilePanelDiscLine span:first-child');
+  var mTo=qs('#mobilePanelFinal .total-line span:first-child');
+  if(mSt) mSt.textContent=ui.subtotal;
+  if(mDi) mDi.textContent=ui.discount;
+  if(mTo) mTo.textContent=ui.total;
+  var dSt=qs('#desktopSubtotalBox .subtotal-line span:first-child');
+  var dDi=qs('#desktopDiscLine span:first-child');
+  var dTo=qs('#desktopFinalBox .total-line span:first-child');
+  if(dSt) dSt.textContent=ui.subtotal;
+  if(dDi) dDi.textContent=ui.discount;
+  if(dTo) dTo.textContent=ui.total;
+
+  // Tooltip CSS override
+  var styleEl=document.createElement('style');
+  styleEl.textContent='.info-icon.active::after{content:"'+ui.discountAppliesInfo+'"!important}.info-icon:hover::after{content:"'+ui.discountAppliesInfo.replace(/'/g,"\\'").replace(/\n/g,'\\A')+'"!important}';
+  document.head.appendChild(styleEl);
+
+  // Step 2 header
+  var s2h2=qs('#step2 h2');
+  if(s2h2) s2h2.textContent=ui.step2Title;
+
+  // "Your estimate" label (sibling before step2MobileTotalAmount)
+  var amtEl=el('step2MobileTotalAmount');
+  if(amtEl&&amtEl.previousElementSibling) amtEl.previousElementSibling.textContent=ui.yourEstimate;
+
+  // Form labels & placeholders
+  var nameIn=qs('#step2MobileForm [name="name"]');
+  var emailIn=qs('#step2MobileForm [name="email"]');
+  var compIn=qs('#step2MobileForm [name="company"]');
+  var descIn=qs('#step2MobileForm [name="description"]');
+  if(nameIn){ nameIn.placeholder=ui.namePlaceholder; var nl=nameIn.closest('div').querySelector('label'); if(nl) nl.innerHTML=ui.nameLabel+'<span style="color:#fff;margin-left:2px">*</span>'; }
+  if(emailIn){ emailIn.placeholder=ui.emailPlaceholder; var el2=emailIn.closest('div').querySelector('label'); if(el2) el2.innerHTML=ui.emailLabel+'<span style="color:#fff;margin-left:2px">*</span>'; }
+  if(compIn){ compIn.placeholder=ui.companyPlaceholder; var cl=compIn.closest('div').querySelector('label'); if(cl) cl.textContent=ui.companyLabel; }
+  if(descIn){ descIn.placeholder=ui.projectPlaceholder; var dl=descIn.closest('div').querySelector('label'); if(dl) dl.innerHTML=ui.projectLabel+'<span style="color:#fff;margin-left:2px">*</span>'; }
+
+  // Terms checkbox label
+  var termsLbl=qs('label[for="termsCheckboxCustom"]');
+  if(termsLbl) termsLbl.innerHTML=ui.termsText;
+
+  // Continue & Back
+  var contBtn=el('step2MobileContinueBtn'), backLnk=el('step2MobileBackBtn');
+  if(contBtn) contBtn.textContent=ui.continueBtn;
+  if(backLnk) backLnk.textContent=ui.backLink;
+
+  // Step 2 note
+  var s2note=qs('#step2 .note');
+  if(s2note) s2note.textContent=ui.formNote;
+
+  // Step 3 header
+  var s3h2=el('step3Title'), s3conf=el('step3ConfirmationText');
+  if(s3h2) s3h2.textContent=ui.step3Title;
+  if(s3conf) s3conf.textContent=ui.confirmText;
+
+  // Back to Homepage
+  var s3home=qs('#step3BackHomeBtn a');
+  if(s3home) s3home.textContent=ui.backHome;
+
+  // Summary title
+  var s3sum=qs('#step3SummaryToggle div:first-child');
+  if(s3sum) s3sum.textContent=ui.summaryTitle;
+
+  // Summary field labels (each is a span sibling of the value element)
+  function prevSpan(id){ var e=el(id); return e&&e.previousElementSibling; }
+  var nl2=prevSpan('step3Name'), el3=prevSpan('step3Email'), cl2=prevSpan('step3Company');
+  var dl2=prevSpan('step3BookedDate'), tl=prevSpan('step3BookedTime');
+  if(nl2) nl2.textContent=ui.nameField;
+  if(el3) el3.textContent=ui.emailField;
+  if(cl2) cl2.textContent=ui.companyField;
+  if(dl2) dl2.textContent=ui.callScheduled;
+  if(tl) tl.textContent=ui.timeField;
+
+  // Message label & toggle
+  var msgText=el('step3MessageText');
+  if(msgText&&msgText.previousElementSibling) msgText.previousElementSibling.textContent=ui.messageField;
+  var msgToggle=el('step3MessageToggle');
+  if(msgToggle) msgToggle.textContent=ui.viewFullMsg;
+
+  // Services label
+  var svcVis=el('step3ServicesVisible');
+  if(svcVis&&svcVis.previousElementSibling) svcVis.previousElementSibling.textContent=ui.servicesField;
+
+  // Pricing labels
+  var stLabel=qs('#step3SubtotalRow span:first-child');
+  var discLabel=qs('#step3DiscountRow span:first-child');
+  var estLabel=el('step3Total')&&el('step3Total').closest('[style]')&&el('step3Total').closest('[style]').querySelector('span');
+  if(stLabel) stLabel.textContent=ui.subtotalField;
+  if(discLabel) discLabel.textContent=ui.discountField;
+  if(estLabel) estLabel.textContent=ui.estimateField;
+
+  // Calendar section
+  var calSection=qs('#step3 [style*="font-size:20px"]');
+  var calSub=qs('#step3 [style*="margin-bottom:24px"][style*="rgba(255,255,255,.5)"]');
+  if(calSection) calSection.textContent=ui.calendarTitle;
+  if(calSub) calSub.textContent=ui.calendarSubtitle;
+
+  // Prev/Next month buttons
+  var prevBtn=el('prevMonth'), nextBtn=el('nextMonth');
+  if(prevBtn) prevBtn.textContent=ui.prevMonth;
+  if(nextBtn) nextBtn.textContent=ui.nextMonth;
+
+  // Change date button (keep SVG)
+  var changeDateBtn=el('backToDateBtn');
+  if(changeDateBtn){ var svg=changeDateBtn.querySelector('svg'); changeDateBtn.textContent=ui.changeDate; if(svg) changeDateBtn.insertBefore(svg,changeDateBtn.firstChild); }
+
+  // Loading text
+  var loadDiv=qs('#calendarLoading div');
+  if(loadDiv) loadDiv.textContent=ui.loadingDates;
+
+  // Book & back buttons
+  var bookBtn=el('bookDiscoveryBtn'), s3back=el('step3BackBtn');
+  if(bookBtn) bookBtn.textContent=ui.bookBtn;
+  if(s3back) s3back.textContent=ui.back;
+}
+
+// ============================================================
 // DOM READY
 // ============================================================
 document.addEventListener('DOMContentLoaded', function(){
+  if(isRS) patchUI();
   if(window.innerWidth < 768){
     initMobile();
     var infoIcon = document.getElementById('mobileInfoIcon');
